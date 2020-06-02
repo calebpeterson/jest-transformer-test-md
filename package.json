@@ -1,0 +1,20 @@
+{
+  "name": "jest-sandbox",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "author": "caleb.peterson@zapier.com",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "jest": "^26.0.1"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "babel-preset-jest": "^26.0.0",
+    "remark-parse": "^8.0.2",
+    "unified": "^9.0.0"
+  }
+}
