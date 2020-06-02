@@ -9,7 +9,8 @@
     "jest": "^26.0.1"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest --no-cache",
+    "dev": "NODE_ENV=development jest --no-cache"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",

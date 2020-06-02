@@ -6,13 +6,12 @@ const jestPreset = require("babel-preset-jest");
 const unified = require("unified");
 const markdown = require("remark-parse");
 
-const generator = require("./md-test-generator");
+const generate = require("./md-test-generator");
 
 module.exports = {
   process(src, filename) {
-    console.log(`process ${filename}`);
     const mdast = unified().use(markdown, {}).parse(src);
-    const code = generator(mdast, filename);
+    const code = generate(mdast, filename);
 
     const result = transform(code, {
       filename,

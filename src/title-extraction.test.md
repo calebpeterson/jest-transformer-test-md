@@ -2,20 +2,20 @@
 const generator = require("./md-test-generator");
 ```
 
-# Describe block wrapping
-
-The tests should always be included within a describe block.
+# Markdown header-based `it` block wrapping
 
 ```js
 const expected = `
 const random = require("./random");
 
-describe("the test", () => {
+describe("test-file.test.md", () => {
   it("the test", () => {
     expect(random()).toBeLessThan(1);
   });
-});`;
+});
+`;
 
+// The AST of a bit of markdown
 const mdast = {
   type: "root",
   children: [
@@ -39,19 +39,5 @@ const mdast = {
   ],
 };
 
-expect(generator(mdast)).toBe(expected.trim());
-```
-
-# It block wrapping
-
-The textual element immediately preceding a code block will provide the `it(...)` message
-
-# It's possible to mark a block as `only`
-
-```js only
-```
-
-# It's possible to mark a block as `skip`
-
-```js skip
+expect(generator(mdast, "test-file.test.md")).toBe(expected.trim());
 ```

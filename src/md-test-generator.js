@@ -1,9 +1,5 @@
 const path = require("path");
-
-const isEmpty = (array) => !array || array.length === 0;
-
-const last = (array) =>
-  array && array.length > 0 ? array[array.length - 1] : undefined;
+const { isEmpty, last } = require("./utils");
 
 const joinChildrenAsText = (children) =>
   children
@@ -12,57 +8,83 @@ const joinChildrenAsText = (children) =>
     .join("")
     .trim();
 
-const code2snippets = (code, title) =>
-  code
-    .map((snippet) =>
+const ANNOTATIONS = {
+  only: ".only",
+  skip: ".skip",
+  [null]: "",
+};
+
+const snippetsToSource = (snippets, title) =>
+  snippets
+    .map(({ snippet, meta }) =>
       `
-  it("${title}", () => {
+  it${ANNOTATIONS[meta]}("${title}", () => {
     ${snippet}
   });
 `.trim()
     )
     .join("\n\n");
 
-const test2code = ({ title, code }) =>
-  title
+const testToSource = ({ name, title, snippets }) =>
+  name
     ? `
-describe("${title}", () => {
-  ${code2snippets(code, title)}
+describe("${name}", () => {
+  ${snippetsToSource(snippets, title)}
 });
 `.trim()
-    : code.join("\n\n");
+    : snippets.map(({ snippet }) => snippet).join("\n\n");
 
-const tests2code = (tests) => {
-  return tests.map(test2code).join("\n\n");
-};
+const testsToSource = (tests) => tests.map(testToSource).join("\n\n");
 
 module.exports = function generator(mdast, filename) {
+  const name = path.basename(filename);
+
   const tests = mdast.children.reduce((acc, node) => {
+    const { meta } = node;
+
     try {
       if (node.type === "heading") {
         const title = joinChildrenAsText(node.children);
-        return [...acc, { title, depth: node.depth, code: [] }];
+        const test = {
+          name,
+          title,
+          depth: node.depth,
+          snippets: [],
+        };
+        return [...acc, test];
       }
+
       if (node.type === "code") {
+        const snippet = {
+          snippet: node.value,
+          meta,
+        };
+
+        // No headers have been seen yet, so this code
+        // goes  outside of the top-most describe block
         if (isEmpty(acc)) {
-          return [{ code: [node.value] }];
+          return [{ snippets: [snippet] }];
         }
-        last(acc).code.push(node.value);
+
+        // This mutates the acc :(
+        last(acc).snippets.push(snippet);
       }
+
       return acc;
     } catch (e) {
-      console.error(`Error processing MDAST node`, node);
+      console.error(`Error processing Markdown AST node`, node);
       throw e;
     }
   }, []);
 
-  console.log(`Tests for ${filename}`);
-  console.log(mdast);
-  console.log(tests);
+  const code = testsToSource(tests);
 
-  const code = tests2code(tests);
-
-  console.log(code);
+  if (process.env.NODE_ENV === "development") {
+    console.log(`Tests for ${filename}`);
+    console.log(mdast);
+    console.log(tests);
+    console.log(code);
+  }
 
   return code;
 };
