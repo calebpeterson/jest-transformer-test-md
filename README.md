@@ -1,14 +1,23 @@
 # Write your Jest tests in Markdown
 
-Would you like to write your `jest` tests in `markdown` like this?
+Document public-facing APIs while simultaneously testing them.
+The best part is your documentation _and_ test suites are now
+trivially publishable!
 
-You'll be able to document public-facing APIs while simultaneously
-testing them. The best part is your documentation _and_ test suites
-are trivially publishable!
+## How it works
+
+Write normal Markdown (like this `README.md`), and then include your
+your tests as multiline code blocks.
 
 ```js
 expect(true).toBe(true);
 ```
+
+**In fact, this `README.md` is part of the test suite 👆**
+
+## Configuring Jest
+
+Check out this repository's [`jest.config.js`](./jest.config.js).
 
 ## Resources
 
