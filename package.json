@@ -1,5 +1,5 @@
 {
-  "name": "jest-transformer-md",
+  "name": "jest-transformer-test-md",
   "version": "1.0.0",
   "main": "src/index.js",
   "author": "caleb.peterson@zapier.com",

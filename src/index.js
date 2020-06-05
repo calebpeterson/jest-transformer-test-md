@@ -1,3 +1,3 @@
-const markdownTransformer = require("jest-md-transform");
+const markdownTransformer = require("./jest-md-transform");
 
 module.exports = markdownTransformer;
