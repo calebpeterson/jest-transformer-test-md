@@ -6,14 +6,14 @@ trivially publishable!
 
 ## How it works
 
-Write normal Markdown (like this `README.md`), and then include your
+Write normal Markdown (like this `README.md`), and then include
 your tests as multiline code blocks.
 
 ```js
 expect(true).toBe(true);
 ```
 
-**In fact, this `README.md` is part of the test suite 👆**
+**In fact, this `README.md` is part of the test suite for this repo 🤓**
 
 ## Configuring Jest
 
